@@ -728,7 +728,7 @@ const CreateOrder = () => {
                   <TableRow>
                     <TableCell>Mã lô</TableCell>
                     <TableCell>HSD</TableCell>
-                    <TableCell>Giá gốc</TableCell>
+                    <TableCell>Giá</TableCell>
                     <TableCell>Giảm giá</TableCell>
                     <TableCell>Kho</TableCell>
                     <TableCell>Quầy</TableCell>
