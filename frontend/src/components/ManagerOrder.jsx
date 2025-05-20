@@ -25,7 +25,7 @@ import {
   Alert,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import VisibilityIcon from "@mui.com/icons-material/Visibility";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import PrintIcon from "@mui/icons-material/Print";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -113,7 +113,7 @@ function ManagerOrder() {
       }
 
       const response = await axios.get(
-        `https://deployment-370a.onrender.com/api/orders?${params.toString()}`,
+        `http://localhost:8000/api/orders?${params.toString()}`,
         {
           headers: { Authorization: `Bearer ${authToken}` },
         }
@@ -351,14 +351,11 @@ function ManagerOrder() {
                       item.batchesUsed[0] &&
                       item.batchesUsed[0].batchId &&
                       item.batchesUsed[0].batchId.discountInfo &&
-                      typeof item.batchesUsed[0].batchId.discountInfo
-                        .discountValue === "number"
+                      typeof item.batchesUsed[0].batchId.discountInfo.discountValue === "number"
                         ? item.batchesUsed[0].batchId.discountInfo.discountValue
                         : 0;
-                    const originalPrice =
-                      (item.originalUnitPrice || 0) * (item.quantity || 0);
-                    const discountAmount =
-                      (originalPrice * discountPercent) / 100;
+                    const originalPrice = (item.originalUnitPrice || 0) * (item.quantity || 0);
+                    const discountAmount = (originalPrice * discountPercent) / 100;
                     const finalPrice = originalPrice - discountAmount;
                     return sum + finalPrice;
                   }, 0);
@@ -461,12 +458,9 @@ function OrderDetailDialog({
     setLoadingBatches(true);
     try {
       const batchPromises = batchIds.map((batchId) =>
-        axios.get(
-          `https://deployment-370a.onrender.com/api/batches/${batchId}`,
-          {
-            headers: { Authorization: `Bearer ${authToken}` },
-          }
-        )
+        axios.get(`http://localhost:8000/api/batches/${batchId}`, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        })
       );
       const responses = await Promise.all(batchPromises);
       const batchData = responses.reduce((acc, res) => {
@@ -484,7 +478,7 @@ function OrderDetailDialog({
   const handleCompletePayment = async () => {
     try {
       const response = await axios.post(
-        `https://deployment-370a.onrender.com/api/orders/${order._id}/complete-payment`,
+        `http://localhost:8000/api/orders/${order._id}/complete-payment`,
         { amountPaid: parseFloat(amountPaid) },
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
@@ -503,7 +497,7 @@ function OrderDetailDialog({
   const handleUpdateOrder = async () => {
     try {
       const response = await axios.patch(
-        `https://deployment-370a.onrender.com/api/orders/${order._id}`,
+        `http://localhost:8000/api/orders/${order._id}`,
         editedOrder,
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
@@ -517,34 +511,6 @@ function OrderDetailDialog({
       showSnackbar("Lỗi khi cập nhật đơn hàng", "error");
     }
   };
-
-  // Function to group products
-  const groupedProducts = useMemo(() => {
-    const grouped = {};
-    order.products.forEach((item) => {
-      const discountPercent =
-        batchDetails[item.batchesUsed?.[0]?.batchId]?.discountInfo
-          ?.discountValue || 0;
-      const key = `${item.productId?._id}-${discountPercent}`;
-
-      if (!grouped[key]) {
-        grouped[key] = {
-          ...item,
-          quantity: 0,
-          originalPriceSum: 0,
-          discountAmountSum: 0,
-          finalPriceSum: 0,
-        };
-      }
-      grouped[key].quantity += item.quantity;
-      grouped[key].originalPriceSum += item.originalUnitPrice * item.quantity;
-      grouped[key].discountAmountSum +=
-        (item.originalUnitPrice * item.quantity * discountPercent) / 100;
-      grouped[key].finalPriceSum +=
-        item.originalUnitPrice * item.quantity * (1 - discountPercent / 100);
-    });
-    return Object.values(grouped);
-  }, [order.products, batchDetails]);
 
   return (
     <>
@@ -597,23 +563,22 @@ function OrderDetailDialog({
                   <TableCell>STT</TableCell>
                   <TableCell>Sản phẩm</TableCell>
                   <TableCell>Số lượng</TableCell>
-                  <TableCell>Đơn vị</TableCell>
+                  <TableCell>Đơn vị</TableCell>s
                   <TableCell>Giá</TableCell>
                   <TableCell>Giảm giá (%)</TableCell>
                   <TableCell>Thành tiền</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {groupedProducts.map((item, idx) => {
+                {order.products.map((item, idx) => {
                   const discountPercent =
                     batchDetails[item.batchesUsed?.[0]?.batchId]?.discountInfo
                       ?.discountValue || 0;
-                  const originalPrice = item.originalUnitPrice || 0;
-
+                  const originalPrice = (item.originalUnitPrice || 0) * (item.quantity || 0);
+                  const discountAmount = (originalPrice * discountPercent) / 100;
+                  const finalPrice = originalPrice - discountAmount;
                   return (
-                    <TableRow
-                      key={`${item.productId?._id}-${discountPercent}-${idx}`}
-                    >
+                    <TableRow key={item._id}>
                       <TableCell>{idx + 1}</TableCell>
                       <TableCell>
                         {item.productId?.name || "Đang tải..."}
@@ -621,7 +586,7 @@ function OrderDetailDialog({
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{item.selectedUnitName}</TableCell>
                       <TableCell>
-                        {originalPrice.toLocaleString("vi-VN", {
+                        {(item.originalUnitPrice || 0).toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
                         })}
@@ -631,7 +596,7 @@ function OrderDetailDialog({
                         {discountPercent > 0 && (
                           <span style={{ color: "#2e7d32" }}>
                             (
-                            {item.discountAmountSum.toLocaleString("vi-VN", {
+                            {discountAmount.toLocaleString("vi-VN", {
                               style: "currency",
                               currency: "VND",
                             })}
@@ -640,7 +605,7 @@ function OrderDetailDialog({
                         )}
                       </TableCell>
                       <TableCell>
-                        {item.finalPriceSum.toLocaleString("vi-VN", {
+                        {finalPrice.toLocaleString("vi-VN", {
                           style: "currency",
                           currency: "VND",
                         })}
@@ -658,11 +623,10 @@ function OrderDetailDialog({
                       {order.products
                         .reduce((sum, item) => {
                           const discountPercent =
-                            batchDetails[item.batchesUsed?.[0]?.batchId]
-                              ?.discountInfo?.discountValue || 0;
+                            batchDetails[item.batchesUsed?.[0]?.batchId]?.discountInfo
+                              ?.discountValue || 0;
                           const originalPrice =
-                            (item.originalUnitPrice || 0) *
-                            (item.quantity || 0);
+                            (item.originalUnitPrice || 0) * (item.quantity || 0);
                           return sum + (originalPrice * discountPercent) / 100;
                         }, 0)
                         .toLocaleString("vi-VN", {
@@ -682,13 +646,11 @@ function OrderDetailDialog({
                       {order.products
                         .reduce((sum, item) => {
                           const discountPercent =
-                            batchDetails[item.batchesUsed?.[0]?.batchId]
-                              ?.discountInfo?.discountValue || 0;
+                            batchDetails[item.batchesUsed?.[0]?.batchId]?.discountInfo
+                              ?.discountValue || 0;
                           const originalPrice =
-                            (item.originalUnitPrice || 0) *
-                            (item.quantity || 0);
-                          const discountAmount =
-                            (originalPrice * discountPercent) / 100;
+                            (item.originalUnitPrice || 0) * (item.quantity || 0);
+                          const discountAmount = (originalPrice * discountPercent) / 100;
                           const finalPrice = originalPrice - discountAmount;
                           return sum + finalPrice;
                         }, 0)
