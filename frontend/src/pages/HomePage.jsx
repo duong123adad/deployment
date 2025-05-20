@@ -146,7 +146,7 @@ const HomePage = () => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8000/api/products/batch/products-with-batches"
+          "https://deployment-370a.onrender.com/api/products/batch/products-with-batches"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -164,7 +164,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/categories");
+        const response = await fetch("https://deployment-370a.onrender.com/api/categories");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

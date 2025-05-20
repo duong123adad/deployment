@@ -18,7 +18,7 @@ const ForgotPasswordPage = () => {
 
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/auth/request-password-reset",
+                "https://deployment-370a.onrender.com/api/auth/request-password-reset",
                 { email },
                 {
                   withCredentials: true, // Important for sending cookies

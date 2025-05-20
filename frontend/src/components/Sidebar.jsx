@@ -136,7 +136,7 @@ const Sidebar = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8000/api/auth/logout",
+        "https://deployment-370a.onrender.com/api/auth/logout",
         {},
         {
           headers: {

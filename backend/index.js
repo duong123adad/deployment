@@ -36,7 +36,7 @@ const connectDB = async () => {
 connectDB();
 
 app.use(cors({
-    origin: ["https://deployment-eight-drab.vercel.app", "http://localhost:8000"],
+    origin: ["https://deployment-eight-drab.vercel.app", "https://deployment-370a.onrender.com"],
     credentials: true,
 }));
 

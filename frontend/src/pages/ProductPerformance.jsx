@@ -76,11 +76,11 @@ const ProductPerformance = () => {
         console.log("Fetching orders and products data...");
         
         // Lấy dữ liệu hóa đơn bán hàng
-        const orderRes = await axios.get("http://localhost:8000/api/orders", config);
+        const orderRes = await axios.get("https://deployment-370a.onrender.com/api/orders", config);
         console.log("Orders response:", orderRes.data);
         
         // Lấy danh sách sản phẩm từ API chính - bổ sung populate
-        const productsRes = await axios.get("http://localhost:8000/api/products?populate=category", config);
+        const productsRes = await axios.get("https://deployment-370a.onrender.com/api/products?populate=category", config);
         console.log("Products response:", productsRes.data);
         
         // Phương pháp dự phòng - lấy thông tin sản phẩm từ order

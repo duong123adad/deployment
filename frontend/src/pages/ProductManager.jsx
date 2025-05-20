@@ -123,7 +123,7 @@ const ProductManager = () => {
 
     const handleCreateCategory = async () => {
         try {
-            const response = await axios.post("http://localhost:8000/api/categories", newCategory, {
+            const response = await axios.post("https://deployment-370a.onrender.com/api/categories", newCategory, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setCategories([...categories, response.data]);
@@ -147,7 +147,7 @@ const ProductManager = () => {
         const fetchData = async () => {
             try {
                 // Gọi API với phân trang và lọc danh mục
-                let url = `http://localhost:8000/api/products?page=${page}&limit=15`;
+                let url = `https://deployment-370a.onrender.com/api/products?page=${page}&limit=15`;
                 if (selectedCategoryFilter) {
                     url += `&category=${selectedCategoryFilter}`;
                 }
@@ -155,10 +155,10 @@ const ProductManager = () => {
                     axios.get(url, {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
-                    axios.get("http://localhost:8000/api/categories", {
+                    axios.get("https://deployment-370a.onrender.com/api/categories", {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
-                    axios.get("http://localhost:8000/api/suppliers", {
+                    axios.get("https://deployment-370a.onrender.com/api/suppliers", {
                         headers: { Authorization: `Bearer ${token}` },
                     }),
                 ]);
@@ -256,13 +256,13 @@ const ProductManager = () => {
                 let response;
                 if (currentProduct) {
                     response = await axios.patch(
-                        `http://localhost:8000/api/products/${currentProduct._id}`,
+                        `https://deployment-370a.onrender.com/api/products/${currentProduct._id}`,
                         formData,
                         config
                     );
                 } else {
                     response = await axios.post(
-                        "http://localhost:8000/api/products",
+                        "https://deployment-370a.onrender.com/api/products",
                         formData,
                         config
                     );
@@ -277,7 +277,7 @@ const ProductManager = () => {
                 });
 
                 handleCloseDialog();
-                const updatedProducts = await axios.get("http://localhost:8000/api/products", {
+                const updatedProducts = await axios.get("https://deployment-370a.onrender.com/api/products", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setProducts(Array.isArray(updatedProducts.data.data) ? updatedProducts.data.data : []);
@@ -405,7 +405,7 @@ const ProductManager = () => {
             if (product.active) {
                 // Soft delete - update to inactive
                 await axios.patch(
-                    `http://localhost:8000/api/products/${id}`,
+                    `https://deployment-370a.onrender.com/api/products/${id}`,
                     { active: false },
                     {
                         headers: { Authorization: `Bearer ${token}` },
@@ -424,7 +424,7 @@ const ProductManager = () => {
             } else {
                 // Hard delete - remove from database
                 await axios.delete(
-                    `http://localhost:8000/api/products/${id}`,
+                    `https://deployment-370a.onrender.com/api/products/${id}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }

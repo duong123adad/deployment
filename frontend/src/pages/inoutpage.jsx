@@ -67,10 +67,10 @@ const InOutPage = () => {
           : {};
         
         // Phiếu nhập kho (chi)
-        const grRes = await axios.get("http://localhost:8000/api/goodreceipt", config);
+        const grRes = await axios.get("https://deployment-370a.onrender.com/api/goodreceipt", config);
  
         // Hóa đơn bán hàng (thu)
-        const orderRes = await axios.get("http://localhost:8000/api/orders", config);
+        const orderRes = await axios.get("https://deployment-370a.onrender.com/api/orders", config);
 
         // Xử lý dữ liệu phiếu nhập kho (goodReceipts)
         let receiptsData = [];

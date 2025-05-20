@@ -43,7 +43,7 @@ const VerifyResetOTPPage = () => {
 
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/auth/verify-reset-password",
+                "https://deployment-370a.onrender.com/api/auth/verify-reset-password",
                 { otp, newPassword },
                 {
                     withCredentials: true, // Important for sending cookies

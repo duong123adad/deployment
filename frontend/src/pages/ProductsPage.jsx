@@ -60,7 +60,7 @@ const ProductListPage = () => {
   const fetchProductsWithBatches = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/products/batch/products-with-batches"
+        "https://deployment-370a.onrender.com/api/products/batch/products-with-batches"
       );
       if (response.data.success) {
         setProductsWithBatches(response.data.data);
@@ -75,7 +75,7 @@ const ProductListPage = () => {
   const fetchProductsWithBatchesByCategory = async (categoryId) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/products/batch/products-with-batches?category=${categoryId}`
+        `https://deployment-370a.onrender.com/api/products/batch/products-with-batches?category=${categoryId}`
       );
       if (response.data.success) {
         setProductsWithBatches(response.data.data);
@@ -90,7 +90,7 @@ const ProductListPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/categories/tree"
+        "https://deployment-370a.onrender.com/api/categories/tree"
       );
       setCategories(response.data);
     } catch (error) {
@@ -147,7 +147,7 @@ const ProductListPage = () => {
 
   const fetchCartInfo = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/cart", {
+      const response = await axios.get("https://deployment-370a.onrender.com/api/cart", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       if (response.data && response.data.items) {
@@ -164,7 +164,7 @@ const ProductListPage = () => {
   const handleAddToCartToApi = async (product, quantity, selectedUnitName) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/cart/add",
+        "https://deployment-370a.onrender.com/api/cart/add",
         [
           {
             productId: product._id,
