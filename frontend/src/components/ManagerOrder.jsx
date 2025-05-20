@@ -582,7 +582,7 @@ function OrderDetailDialog({
                   <TableCell>Sản phẩm</TableCell>
                   <TableCell>Số lượng</TableCell>
                   <TableCell>Đơn vị</TableCell>
-                  <TableCell>Giá gốc</TableCell>
+                  <TableCell>Giá</TableCell>
                   {hasAnyDiscount && <TableCell>Giảm giá (%)</TableCell>}{" "}
                   {/* Conditional column */}
                   <TableCell>Thành tiền</TableCell>
