@@ -62,7 +62,7 @@ const CreateOrder = () => {
       setLoading(true);
       try {
         const productsRes = await axios.get(
-          "https://deployment-370a.onrender.com/api/products/batch/products-with-batches",
+          "http://localhost:8000/api/products/batch/products-with-batches",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -81,7 +81,7 @@ const CreateOrder = () => {
       setLoadingCustomers(true);
       try {
         const customersRes = await axios.get(
-          "https://deployment-370a.onrender.com/api/user?role=customer",
+          "http://localhost:8000/api/user?role=customer",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setCustomers(customersRes.data);
@@ -99,7 +99,7 @@ const CreateOrder = () => {
     if (value.startsWith("BATCH-")) {
       try {
         const res = await axios.get(
-          `https://deployment-370a.onrender.com/api/products/batch/${value}`,
+          `http://localhost:8000/api/products/batch/${value}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         const productWithStock = {
@@ -131,7 +131,7 @@ const CreateOrder = () => {
         }
       } else {
         const res = await axios.get(
-          `https://deployment-370a.onrender.com/api/batches/product/${product.id}`,
+          `http://localhost:8000/api/batches/product/${product.id}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         availableBatches = res.data.filter((b) => b.quantity_on_shelf > 0);
@@ -336,7 +336,7 @@ const CreateOrder = () => {
 
     try {
       const res = await axios.post(
-        "https://deployment-370a.onrender.com/api/orders",
+        "http://localhost:8000/api/orders",
         orderData,
         {
           headers: { Authorization: `Bearer ${token}` },
